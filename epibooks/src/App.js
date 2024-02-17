@@ -1,21 +1,16 @@
+import AlertDismissible from "./Comps/MyAlert/MyAlert";
+import MyFooter from "./Comps/MyFooter/MyFooter";
+import MyMain from "./Comps/MyMain/MyMain";
+import MyNavbar from "./Comps/MyNav/MyNavbar";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <MyNavbar />
+      <AlertDismissible />
+      <MyMain />
+      <MyFooter />
+    </>
   );
 }
 
