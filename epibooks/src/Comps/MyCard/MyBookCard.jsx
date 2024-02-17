@@ -48,7 +48,7 @@ function MyBookCard({ title, price, imgSrc, category, asin, onClick }) {
       </Card>
       <MyModal
         show={showModal}
-        handleClose={handleCloseModal}
+        handleCloseModal={handleCloseModal}
         elementId={asin}
       />
     </Col>

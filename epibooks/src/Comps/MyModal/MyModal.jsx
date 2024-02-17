@@ -1,20 +1,28 @@
+import axios from "axios";
 import { useState, useEffect } from "react";
 import { Modal, Button, Form, ListGroup } from "react-bootstrap";
-import Rating from "react-rating-stars-component";
-import axios from "axios";
+import MyAlert from "../MyAlert/MyAlert";
 
-function MyModal({ show, handleClose, elementId }) {
+function MyModal({ show, handleCloseModal, elementId }) {
   const key =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWQwOWQ1MmE3NzE2ODAwMTk3NzViYTkiLCJpYXQiOjE3MDgxNzA1NzgsImV4cCI6MTcwOTM4MDE3OH0.K7DUpJkqtq3ER_Fw2xCPolSmOyybJ_2Je_DmJ6PnZCQ";
   const [comment, setComment] = useState("");
   const [rating, setRating] = useState(0);
   const [comments, setComments] = useState([]);
-  const [ratingKey, setRatingKey] = useState(0);
   const [editingCommentId, setEditingCommentId] = useState(null);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     show && fetchComments();
   }, [show]);
+
+  const showError = (err) => {
+    return <MyAlert message={err} />;
+  };
+
+  useEffect(() => {
+    showError(error);
+  }, [error]);
 
   const fetchComments = async () => {
     const url = `https://striveschool-api.herokuapp.com/api/books/${elementId}/comments/`;
@@ -22,10 +30,11 @@ function MyModal({ show, handleClose, elementId }) {
       const response = await axios.get(url, {
         headers: { Authorization: `Bearer ${key}` },
       });
-      const first2Comments = response.data.slice(0, 2);
+      const first2Comments = response.data.reverse().slice(0, 2);
       setComments(first2Comments);
-    } catch (error) {
-      console.error("Error fetching comments:", error);
+    } catch (err) {
+      console.error("Error fetching comments:", err);
+      setError(err.message);
     }
   };
 
@@ -59,10 +68,11 @@ function MyModal({ show, handleClose, elementId }) {
       }
       setComment("");
       setEditingCommentId(null);
-      setRatingKey((prevKey) => prevKey + 1);
+      setRating(0);
       fetchComments();
-    } catch (error) {
-      console.error("Error saving comment:", error);
+    } catch (err) {
+      console.error("Error saving comment:", err.message);
+      setError(err.message);
     }
   };
 
@@ -87,19 +97,20 @@ function MyModal({ show, handleClose, elementId }) {
       );
       setComments(updatedComments);
       fetchComments();
-    } catch (error) {
-      console.error("Error deleting comment:", error);
+    } catch (err) {
+      console.error("Error deleting comment:", err);
+      setError(err.message);
     }
   };
 
-  const startEdit = (comment) => {
+  const handleEdit = (comment) => {
     setComment(comment.comment);
     setRating(comment.rate);
     setEditingCommentId(comment._id);
   };
 
   return (
-    <Modal show={show} onHide={handleClose}>
+    <Modal show={show} onHide={handleCloseModal}>
       <Modal.Header closeButton>
         <Modal.Title>Comment And Rate:</Modal.Title>
       </Modal.Header>
@@ -122,7 +133,7 @@ function MyModal({ show, handleClose, elementId }) {
                   variant="primary"
                   className="my-2"
                   size="sm"
-                  onClick={() => startEdit(comment)}
+                  onClick={() => handleEdit(comment)}
                 >
                   Edit Rating
                 </Button>
@@ -150,20 +161,27 @@ function MyModal({ show, handleClose, elementId }) {
           <Form.Group className="mb-1">
             <Form.Label>
               <strong>Rate:</strong>
+              <br />
             </Form.Label>
-            <Rating
-              key={ratingKey}
-              count={5}
-              onChange={setRating}
-              size={20}
-              activeColor="#ffbf00"
-              value={rating}
+            <Form.Control
+              as="textarea"
+              rows={1}
+              placeholder="1 - 5"
+              onChange={(e) => {
+                if (e.target.value > 0 && e.target.value < 6) {
+                  return setRating(e.target.value);
+                } else {
+                  setError("Please insert a number between 1 and 5");
+                  showError(error);
+                }
+              }}
+              // {error === "Please insert a number between 1 and 5" ? isValid : isInvalid}
             />
           </Form.Group>
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
+        <Button variant="danger" onClick={handleCloseModal}>
           Close
         </Button>
         <Button variant="primary" onClick={handleSave}>
