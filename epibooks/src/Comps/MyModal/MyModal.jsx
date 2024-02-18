@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { Circles } from "react-loader-spinner";
 import { Modal, Button, Form, ListGroup } from "react-bootstrap";
-import MyAlert from "../MyAlert/MyAlert";
 
 function MyModal({ show, handleCloseModal, elementId }) {
   const key =
@@ -10,19 +10,19 @@ function MyModal({ show, handleCloseModal, elementId }) {
   const [rating, setRating] = useState(0);
   const [comments, setComments] = useState([]);
   const [editingCommentId, setEditingCommentId] = useState(null);
-  const [error, setError] = useState("");
+  const [placeHolder, setPlaceHolder] = useState("1 - 5");
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setVisible(visible);
+    }, 5000)
+  }, [visible])
+
 
   useEffect(() => {
     show && fetchComments();
-  }, [show]);
-
-  const showError = (err) => {
-    return <MyAlert message={err} />;
-  };
-
-  useEffect(() => {
-    showError(error);
-  }, [error]);
+  });
 
   const fetchComments = async () => {
     const url = `https://striveschool-api.herokuapp.com/api/books/${elementId}/comments/`;
@@ -34,7 +34,6 @@ function MyModal({ show, handleCloseModal, elementId }) {
       setComments(first2Comments);
     } catch (err) {
       console.error("Error fetching comments:", err);
-      setError(err.message);
     }
   };
 
@@ -72,7 +71,6 @@ function MyModal({ show, handleCloseModal, elementId }) {
       fetchComments();
     } catch (err) {
       console.error("Error saving comment:", err.message);
-      setError(err.message);
     }
   };
 
@@ -99,7 +97,6 @@ function MyModal({ show, handleCloseModal, elementId }) {
       fetchComments();
     } catch (err) {
       console.error("Error deleting comment:", err);
-      setError(err.message);
     }
   };
 
@@ -116,36 +113,53 @@ function MyModal({ show, handleCloseModal, elementId }) {
       </Modal.Header>
       <Modal.Body>
         <Form>
-          <h5>Comments from Users:</h5>
+          <h5>Comments from other users:</h5>
           <ListGroup>
-            {comments.slice(0, 5).map((comment, i) => (
-              <ListGroup.Item key={i}>
-                <div>
-                  <b>Author:</b> {comment.author}
+            {comments.length > 0 ? (
+              comments.slice(0, 5).map((comment, i) => (
+                <ListGroup.Item key={i}>
+                  <div>
+                    <b>Author:</b> {comment.author}
+                  </div>
+                  <div>
+                    <b>Rating: {comment.rate}/5 </b>
+                  </div>
+                  <div>
+                    <b>Comment:</b> {comment.comment}
+                  </div>
+                  <Button
+                    variant="primary"
+                    className="my-2"
+                    size="sm"
+                    onClick={() => handleEdit(comment)}
+                  >
+                    Edit Rating
+                  </Button>
+                  <Button
+                    variant="danger"
+                    size="sm"
+                    onClick={() => handleDelete(comment._id)}
+                  >
+                    Delete Rating
+                  </Button>
+                </ListGroup.Item>
+              ))
+            ) : (
+              <div>
+                <div className={visible ? `d-flex justify-content-center my-5` : "d-none"}>
+                  <Circles
+                    height="50"
+                    width="50"
+                    color="#000"
+                    ariaLabel="circles-loading"
+                    wrapperStyle={{}}
+                    wrapperClass=""
+                    visible={visible}
+                  />
                 </div>
-                <div>
-                  <b>Rating: {comment.rate}/5 </b>
-                </div>
-                <div>
-                  <b>Comment:</b> {comment.comment}
-                </div>
-                <Button
-                  variant="primary"
-                  className="my-2"
-                  size="sm"
-                  onClick={() => handleEdit(comment)}
-                >
-                  Edit Rating
-                </Button>
-                <Button
-                  variant="danger"
-                  size="sm"
-                  onClick={() => handleDelete(comment._id)}
-                >
-                  Delete Rating
-                </Button>
-              </ListGroup.Item>
-            ))}
+                <p className={!visible ? "" : "d-none"}>No comments found, try again later</p>
+              </div>
+            )}
           </ListGroup>
           <Form.Group className="my-2" controlId="commentTextArea">
             <Form.Label>
@@ -160,7 +174,7 @@ function MyModal({ show, handleCloseModal, elementId }) {
           </Form.Group>
           <Form.Group className="mb-1">
             <Form.Label>
-              <strong>Rate:</strong>
+              <strong>Rate:</strong> ({placeHolder})
               <br />
             </Form.Label>
             <Form.Control
@@ -171,11 +185,9 @@ function MyModal({ show, handleCloseModal, elementId }) {
                 if (e.target.value > 0 && e.target.value < 6) {
                   return setRating(e.target.value);
                 } else {
-                  setError("Please insert a number between 1 and 5");
-                  showError(error);
+                  setPlaceHolder("Please insert a number between 1 and 5");
                 }
               }}
-              // {error === "Please insert a number between 1 and 5" ? isValid : isInvalid}
             />
           </Form.Group>
         </Form>

@@ -12,7 +12,9 @@ function MyBookCard({ title, price, imgSrc, category, asin, onClick }) {
 
   const handleClick = () => {
     setIsSelected(!isSelected);
-    if (onClick) onClick();
+    if (onClick) {
+      onClick();
+    }
   };
 
   return (
