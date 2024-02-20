@@ -1,21 +1,27 @@
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import MySearchbar from "../MySearchbar/MySearchbar";
+import MySearchbar from "./MySearchbar";
 import "./MyNavbar.css";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { filterBooks } from "../../reducers/books/booksSlice";
+import { getBooks } from "../../reducers/books/booksSlice";
 
 const MyNavbar = () => {
-  // const handleSearch = (value) => {
-  //   let result;
-  //   if (value === "") {
-  //     setFilteredBooks(data);
-  //   } else {
-  //     result = data.filter((book) =>
-  //       book.title.toLowerCase().includes(value.toLowerCase())
-  //     );
-  //     setFilteredBooks(result);
-  //   }
-  // };
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getBooks());
+  }, [dispatch]);
+
+  const handleInput = (value) => {
+    if (value.length > 1) {
+      dispatch(filterBooks(value));
+    } else {
+      dispatch(getBooks());
+    }
+  };
 
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
@@ -30,7 +36,9 @@ const MyNavbar = () => {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="d-flex align-items-center justify-content-between w-100">
             <Nav.Link href="#">Home</Nav.Link>
-            <MySearchbar />
+            <div className="searchbar d-flex gap-2">
+              <MySearchbar onChange={(e) => handleInput(e)} />
+            </div>
           </Nav>
         </Navbar.Collapse>
       </Container>

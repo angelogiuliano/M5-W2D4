@@ -1,21 +1,26 @@
-import React, { useState, useEffect, useContext } from "react";
-import axios from "axios";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Container from "react-bootstrap/Container";
 import MyBookCard from "../MyCard/MyBookCard";
 import Row from "react-bootstrap/Row";
-import { Alert } from "react-bootstrap";
-import { BookContext } from "../ProviderComponent/ProviderComponent";
+import MyAlert from "../MyAlert/MyAlert";
+import {
+  allBooks,
+  getBooks,
+  isAllBooksError,
+  isAllBooksLoading,
+} from "../../reducers/books/booksSlice";
+import { Circles } from "react-loader-spinner";
 
 const AllTheBooks = () => {
-  const [data, setData] = useState([]);
-  const [filteredBooks, setFilteredBooks] = useState([]);
-  const [error, setError] = useState("");
-  const books = useContext(BookContext);
+  const books = useSelector(allBooks);
+  const isLoading = useSelector(isAllBooksLoading);
+  const isError = useSelector(isAllBooksError);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    setData(books);
-    setFilteredBooks(data);
-  }, [books, data]);
+    dispatch(getBooks());
+  }, [dispatch]);
 
   const displayFilteredBooks = (bookCards) =>
     bookCards.map((book) => (
@@ -30,21 +35,38 @@ const AllTheBooks = () => {
     ));
   return (
     <>
-      <Container>
-        {error && (
-          <Alert variant="danger" className="mt-4">
-            {error}
-          </Alert>
-        )}
-
-        <Row>
-          {filteredBooks.length > 0 ? (
-            displayFilteredBooks(filteredBooks)
-          ) : (
-            <p className="my-3">No books found, try something else!</p>
-          )}
-        </Row>
-      </Container>
+      {isLoading && (
+        <div className="d-flex justify-content-center my-5">
+          <Circles
+            height="50"
+            width="50"
+            color="#000"
+            ariaLabel="circles-loading"
+            wrapperStyle={{}}
+            wrapperClass=""
+          />
+        </div>
+      )}
+      {isError && (
+        <MyAlert
+          message="Error, please try again later"
+          show={false}
+          variant="danger"
+        />
+      )}
+      {!isLoading && !isError && (
+        <>
+          <Container>
+            <Row>
+              {books.length > 0 ? (
+                displayFilteredBooks(books)
+              ) : (
+                <p className="my-3">No books found, try something else!</p>
+              )}
+            </Row>
+          </Container>
+        </>
+      )}
     </>
   );
 };
