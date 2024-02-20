@@ -14,7 +14,7 @@ function MySearchbar({ onChange }) {
 
   return (
     <>
-      <Row className="mt-4">
+      <Row>
         <Col>
           <Form.Control
             type="text"
