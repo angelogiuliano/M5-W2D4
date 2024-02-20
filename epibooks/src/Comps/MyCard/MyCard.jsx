@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Card, Col, Button } from "react-bootstrap";
-import "./MyBookCard.css";
+import "./MyCard.css";
 import MyModal from "../MyModal/MyModal";
 
 function MyBookCard({ title, price, imgSrc, category, asin, onClick }) {

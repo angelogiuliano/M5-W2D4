@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Container from "react-bootstrap/Container";
-import MyBookCard from "../MyCard/MyBookCard";
+import MyCard from "../MyCard/MyCard";
 import Row from "react-bootstrap/Row";
 import MyAlert from "../MyAlert/MyAlert";
 import {
@@ -24,7 +24,7 @@ const AllTheBooks = () => {
 
   const displayFilteredBooks = (bookCards) =>
     bookCards.map((book) => (
-      <MyBookCard
+      <MyCard
         key={book.asin}
         title={book.title}
         price={book.price}
