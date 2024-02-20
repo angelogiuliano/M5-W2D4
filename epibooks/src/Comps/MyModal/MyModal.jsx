@@ -24,10 +24,10 @@ function MyModal({ show, handleCloseModal, elementId }) {
 
   useEffect(() => {
     show && fetchComments();
-  },[show]);
+  }, [show]);
 
   const fetchComments = async () => {
-    setMessage("")
+    setMessage("");
     const url = `https://striveschool-api.herokuapp.com/api/books/${elementId}/comments/`;
     try {
       const response = await axios.get(url, {
@@ -35,7 +35,7 @@ function MyModal({ show, handleCloseModal, elementId }) {
       });
       const first2Comments = response.data.reverse().slice(0, 2);
       setComments(first2Comments);
-      setError("")
+      setError("");
     } catch (err) {
       console.error("Error fetching comments:", err);
       setError(err.message);
@@ -43,7 +43,7 @@ function MyModal({ show, handleCloseModal, elementId }) {
   };
 
   const handleSave = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     let url = `https://striveschool-api.herokuapp.com/api/comments/`;
     const givenComment = {
       comment: comment,
@@ -77,7 +77,7 @@ function MyModal({ show, handleCloseModal, elementId }) {
       setEditingCommentId(null);
       setRating(0);
       setMessage("Sent correctly");
-      setError("")
+      setError("");
       fetchComments();
     } catch (err) {
       console.error("Error saving comment:", err.message);
@@ -86,7 +86,7 @@ function MyModal({ show, handleCloseModal, elementId }) {
   };
 
   const handleDelete = async (e, commentId) => {
-    e.preventDefault()
+    e.preventDefault();
     const isConfirmed = window.confirm(
       "Are you sure you want to delete this comment?"
     );
@@ -108,7 +108,7 @@ function MyModal({ show, handleCloseModal, elementId }) {
       setComments(updatedComments);
       fetchComments();
       setMessage("Deleted correctly");
-      setError("")
+      setError("");
     } catch (err) {
       console.error("Error deleting comment:", err);
       setError(err.message);
@@ -120,12 +120,16 @@ function MyModal({ show, handleCloseModal, elementId }) {
     setRating(comment.rate);
     setEditingCommentId(comment._id);
     setMessage("Edited correctly");
-    setError("")
+    setError("");
   };
 
   return (
     <Modal show={show} onHide={handleCloseModal}>
-      {!error && message ? <MyAlert message={message} variant={"success"} /> : <MyAlert message={error} variant={"danger"} />}
+      {!error && message ? (
+        <MyAlert message={message} variant={"success"} />
+      ) : (
+        <MyAlert message={error} variant={"danger"} />
+      )}
       <Modal.Header closeButton>
         <Modal.Title>Comment And Rate:</Modal.Title>
       </Modal.Header>
@@ -208,9 +212,13 @@ function MyModal({ show, handleCloseModal, elementId }) {
               onChange={(e) => {
                 if (e.target.value > 0 && e.target.value < 6) {
                   setRating(e.target.value);
-                  setError("")
+                  setError("");
                   return !error && message ? (
-                    <MyAlert show={false} variant={"success"} message={message} />
+                    <MyAlert
+                      show={false}
+                      variant={"success"}
+                      message={message}
+                    />
                   ) : (
                     <MyAlert show={false} variant={"danger"} message={error} />
                   );

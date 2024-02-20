@@ -4,12 +4,12 @@ import { useState } from "react";
 
 function MySearchbar({ onChange }) {
   const [value, setValue] = useState("");
-  const [hasBeenActive, setHasBeenActive] = useState(false);
 
-  const handleChange = ({ target: { value } }) => {
+  const handleChange = (value) => {
     setValue(value);
-    if (value.length > 0) setHasBeenActive(true);
-    onChange(value);
+    if (value.length > 0) {
+      onChange(value);
+    }
   };
 
   return (
@@ -19,7 +19,7 @@ function MySearchbar({ onChange }) {
           <Form.Control
             type="text"
             placeholder="Search..."
-            onChange={handleChange}
+            onChange={(e) => handleChange(e.target.value)}
           />
         </Col>
       </Row>

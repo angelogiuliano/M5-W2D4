@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import FormTextExample from "../MySearchbar/MySearchbar";
+import MySearchbar from "../MySearchbar/MySearchbar";
 import Container from "react-bootstrap/Container";
 import MyBookCard from "../MyCard/MyBookCard";
 import Row from "react-bootstrap/Row";
@@ -9,8 +9,9 @@ import { Circles } from "react-loader-spinner";
 
 const MyMain = () => {
   const url = "https://striveschool-api.herokuapp.com/books";
-  const key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWNmNjA2NzA0NTcyZjAwMTk0OTM5NDIiLCJpYXQiOjE3MDgwODk0NDcsImV4cCI6MTcwOTI5OTA0N30.4kLfeBI7P4IfRFuz6GSWjcR0NNWLy3Z83VDASt-3j1k";
-  
+  const key =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWNmNjA2NzA0NTcyZjAwMTk0OTM5NDIiLCJpYXQiOjE3MDgwODk0NDcsImV4cCI6MTcwOTI5OTA0N30.4kLfeBI7P4IfRFuz6GSWjcR0NNWLy3Z83VDASt-3j1k";
+
   const [data, setData] = useState([]);
   const [filteredBooks, setFilteredBooks] = useState([]);
   const [error, setError] = useState("");
@@ -64,7 +65,7 @@ const MyMain = () => {
           </Alert>
         )}
 
-        <FormTextExample onChange={handleSearch} />
+        <MySearchbar onChange={handleSearch} />
 
         <Row>
           {filteredBooks.length > 0 ? (
