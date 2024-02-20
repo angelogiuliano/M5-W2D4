@@ -1,4 +1,5 @@
 import axios from "axios";
+import MyAlert from "../MyAlert/MyAlert.jsx";
 import { useState, useEffect } from "react";
 import { Circles } from "react-loader-spinner";
 import { Modal, Button, Form, ListGroup } from "react-bootstrap";
@@ -12,19 +13,21 @@ function MyModal({ show, handleCloseModal, elementId }) {
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [placeHolder, setPlaceHolder] = useState("1 - 5");
   const [visible, setVisible] = useState(true);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
 
   useEffect(() => {
     setTimeout(() => {
       setVisible(visible);
-    }, 5000)
-  }, [visible])
-
+    }, 5000);
+  }, [visible]);
 
   useEffect(() => {
     show && fetchComments();
-  });
+  },[show]);
 
   const fetchComments = async () => {
+    setMessage("")
     const url = `https://striveschool-api.herokuapp.com/api/books/${elementId}/comments/`;
     try {
       const response = await axios.get(url, {
@@ -32,12 +35,15 @@ function MyModal({ show, handleCloseModal, elementId }) {
       });
       const first2Comments = response.data.reverse().slice(0, 2);
       setComments(first2Comments);
+      setError("")
     } catch (err) {
       console.error("Error fetching comments:", err);
+      setError(err.message);
     }
   };
 
-  const handleSave = async () => {
+  const handleSave = async (e) => {
+    e.preventDefault()
     let url = `https://striveschool-api.herokuapp.com/api/comments/`;
     const givenComment = {
       comment: comment,
@@ -53,7 +59,8 @@ function MyModal({ show, handleCloseModal, elementId }) {
             "Content-Type": "application/json",
           },
         });
-        alert("Edited Correctly!");
+        // alert("Edited Correctly!");
+        return <MyAlert variant={"succes"} message={"Edited correctly!"} />;
       } else {
         url = "https://striveschool-api.herokuapp.com/api/comments/";
         givenComment.elementId = elementId;
@@ -63,18 +70,23 @@ function MyModal({ show, handleCloseModal, elementId }) {
             "Content-Type": "application/json",
           },
         });
-        alert("Comment and Rate Added Correctly!");
+        // alert("Comment and Rate Added Correctly!");
+        <MyAlert variant={"succes"} message={"Review added correctly!"} />;
       }
       setComment("");
       setEditingCommentId(null);
       setRating(0);
+      setMessage("Sent correctly");
+      setError("")
       fetchComments();
     } catch (err) {
       console.error("Error saving comment:", err.message);
+      setError(err.message);
     }
   };
 
-  const handleDelete = async (commentId) => {
+  const handleDelete = async (e, commentId) => {
+    e.preventDefault()
     const isConfirmed = window.confirm(
       "Are you sure you want to delete this comment?"
     );
@@ -95,19 +107,25 @@ function MyModal({ show, handleCloseModal, elementId }) {
       );
       setComments(updatedComments);
       fetchComments();
+      setMessage("Deleted correctly");
+      setError("")
     } catch (err) {
       console.error("Error deleting comment:", err);
+      setError(err.message);
     }
   };
 
-  const handleEdit = (comment) => {
+  const handleEdit = (e, comment) => {
     setComment(comment.comment);
     setRating(comment.rate);
     setEditingCommentId(comment._id);
+    setMessage("Edited correctly");
+    setError("")
   };
 
   return (
     <Modal show={show} onHide={handleCloseModal}>
+      {!error && message ? <MyAlert message={message} variant={"success"} /> : <MyAlert message={error} variant={"danger"} />}
       <Modal.Header closeButton>
         <Modal.Title>Comment And Rate:</Modal.Title>
       </Modal.Header>
@@ -131,14 +149,14 @@ function MyModal({ show, handleCloseModal, elementId }) {
                     variant="primary"
                     className="my-2"
                     size="sm"
-                    onClick={() => handleEdit(comment)}
+                    onClick={(e) => handleEdit(e, comment)}
                   >
                     Edit Rating
                   </Button>
                   <Button
                     variant="danger"
                     size="sm"
-                    onClick={() => handleDelete(comment._id)}
+                    onClick={(e) => handleDelete(e, comment._id)}
                   >
                     Delete Rating
                   </Button>
@@ -146,7 +164,11 @@ function MyModal({ show, handleCloseModal, elementId }) {
               ))
             ) : (
               <div>
-                <div className={visible ? `d-flex justify-content-center my-5` : "d-none"}>
+                <div
+                  className={
+                    visible ? `d-flex justify-content-center my-5` : "d-none"
+                  }
+                >
                   <Circles
                     height="50"
                     width="50"
@@ -157,7 +179,9 @@ function MyModal({ show, handleCloseModal, elementId }) {
                     visible={visible}
                   />
                 </div>
-                <p className={!visible ? "" : "d-none"}>No comments found, try again later</p>
+                <p className={!visible ? "" : "d-none"}>
+                  No comments found, try again later
+                </p>
               </div>
             )}
           </ListGroup>
@@ -183,9 +207,19 @@ function MyModal({ show, handleCloseModal, elementId }) {
               placeholder="1 - 5"
               onChange={(e) => {
                 if (e.target.value > 0 && e.target.value < 6) {
-                  return setRating(e.target.value);
+                  setRating(e.target.value);
+                  setError("")
+                  return !error && message ? (
+                    <MyAlert show={false} variant={"success"} message={message} />
+                  ) : (
+                    <MyAlert show={false} variant={"danger"} message={error} />
+                  );
                 } else {
                   setPlaceHolder("Please insert a number between 1 and 5");
+                  setError("Please insert a number between 1 and 5");
+                  return (
+                    <MyAlert show={false} variant={"danger"} message={error} />
+                  );
                 }
               }}
             />
@@ -196,7 +230,7 @@ function MyModal({ show, handleCloseModal, elementId }) {
         <Button variant="danger" onClick={handleCloseModal}>
           Close
         </Button>
-        <Button variant="primary" onClick={handleSave}>
+        <Button variant="primary" onClick={(e) => handleSave(e)}>
           Save
         </Button>
       </Modal.Footer>
