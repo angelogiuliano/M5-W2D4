@@ -24,8 +24,8 @@ const MyNavbar = () => {
   };
 
   return (
-    <Navbar expand="lg" className="bg-body-tertiary">
-      <Container>
+    <Navbar expand="lg" className="bg-body-tertiary w-100">
+      <Container className="mx-0 w-100">
         <img
           src="https://images.theconversation.com/files/45159/original/rptgtpxd-1396254731.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=754&fit=clip"
           className="logo"
@@ -33,7 +33,7 @@ const MyNavbar = () => {
         />
         <Navbar.Brand href="#home">EpiBOOKS</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
+        <Navbar.Collapse id="basic-navbar-nav" className="">
           <Nav className="d-flex align-items-center justify-content-between w-100">
             <Nav.Link href="#">Home</Nav.Link>
             <div className="searchbar d-flex gap-2">

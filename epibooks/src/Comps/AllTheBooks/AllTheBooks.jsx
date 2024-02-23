@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Container from "react-bootstrap/Container";
 import MyCard from "../MyCard/MyCard";
@@ -11,12 +11,19 @@ import {
   isAllBooksLoading,
 } from "../../reducers/books/booksSlice";
 import { Circles } from "react-loader-spinner";
+import "./AllTheBooks.css";
+import MyCommentArea from "../MyCommentArea/MyCommentArea";
 
 const AllTheBooks = () => {
+  const [selectedAsin, setSelectedAsin] = useState(null);
   const books = useSelector(allBooks);
   const isLoading = useSelector(isAllBooksLoading);
   const isError = useSelector(isAllBooksError);
   const dispatch = useDispatch();
+
+  const handleCardClick = (asin) => {
+    setSelectedAsin(asin);
+  };
 
   useEffect(() => {
     dispatch(getBooks());
@@ -31,8 +38,10 @@ const AllTheBooks = () => {
         imgSrc={book.img}
         category={book.category}
         asin={book.asin}
+        onClick={handleCardClick}
       />
     ));
+
   return (
     <>
       {isLoading && (
@@ -55,8 +64,8 @@ const AllTheBooks = () => {
         />
       )}
       {!isLoading && !isError && (
-        <>
-          <Container>
+        <div className="d-flex justify-content-center">
+          <Container className="w-50 border-r">
             <Row>
               {books.length > 0 ? (
                 displayFilteredBooks(books)
@@ -65,7 +74,10 @@ const AllTheBooks = () => {
               )}
             </Row>
           </Container>
-        </>
+          <Container className="w-50 align-items-center border-l">
+            <MyCommentArea elementId={selectedAsin} />
+          </Container>
+        </div>
       )}
     </>
   );

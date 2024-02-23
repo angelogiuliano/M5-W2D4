@@ -4,3 +4,7 @@
     aspect-ratio: 1/1;
     margin-right: 10px;
 }
+
+.container {
+    max-width: none!important;
+}
