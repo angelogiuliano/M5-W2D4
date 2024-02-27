@@ -190,6 +190,7 @@ const MyCommentArea = ({ elementId }) => {
               (e.target.value > 0 && e.target.value < 6) ||
               e.target.value === ""
             ) {
+              setPlaceHolder("1 - 5");
               setRating(e.target.value);
               setError("");
             } else {
