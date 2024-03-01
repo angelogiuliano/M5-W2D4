@@ -8,7 +8,11 @@ function MyCard({ title, price, imgSrc, category, asin, onClick, isSelected }) {
 
   const handleClick = () => {
     if (onClick) {
-      onClick(asin);
+      if (isSelected) {
+        onClick(null);
+      } else {
+        onClick(asin);
+      }
     }
   };
 
