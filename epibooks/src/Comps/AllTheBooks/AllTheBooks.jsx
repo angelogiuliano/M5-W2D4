@@ -1,3 +1,4 @@
+// AllTheBooks.js
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Container from "react-bootstrap/Container";
@@ -16,6 +17,7 @@ import MyCommentArea from "../MyCommentArea/MyCommentArea";
 
 const AllTheBooks = () => {
   const [selectedAsin, setSelectedAsin] = useState(null);
+  const [selected, setSelected] = useState(null);
   const books = useSelector(allBooks);
   const isLoading = useSelector(isAllBooksLoading);
   const isError = useSelector(isAllBooksError);
@@ -23,6 +25,7 @@ const AllTheBooks = () => {
 
   const handleCardClick = (asin) => {
     setSelectedAsin(asin);
+    setSelected(asin);
   };
 
   useEffect(() => {
@@ -39,6 +42,7 @@ const AllTheBooks = () => {
         category={book.category}
         asin={book.asin}
         onClick={handleCardClick}
+        isSelected={selected === book.asin}
       />
     ));
 
