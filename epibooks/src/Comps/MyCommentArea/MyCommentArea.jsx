@@ -1,5 +1,4 @@
 import axios from "axios";
-import MyAlert from "../MyAlert/MyAlert.jsx";
 import { useState, useEffect } from "react";
 import { Circles } from "react-loader-spinner";
 import { Button, Form, ListGroup } from "react-bootstrap";
@@ -28,7 +27,7 @@ const MyCommentArea = ({ elementId }) => {
       const response = await axios.get(url, {
         headers: { Authorization: `Bearer ${key}` },
       });
-      const first2Comments = response.data.reverse().slice(0, 2);
+      const first2Comments = response.data.reverse().slice(0, 5);
       setComments(first2Comments);
       setError("");
     } catch (err) {
@@ -54,7 +53,6 @@ const MyCommentArea = ({ elementId }) => {
             "Content-Type": "application/json",
           },
         });
-        return <MyAlert variant={"succes"} message={"Edited correctly!"} />;
       } else {
         url = "https://striveschool-api.herokuapp.com/api/comments/";
         givenComment.elementId = elementId;
@@ -64,7 +62,6 @@ const MyCommentArea = ({ elementId }) => {
             "Content-Type": "application/json",
           },
         });
-        <MyAlert variant={"succes"} message={"Review added correctly!"} />;
       }
       setComment("");
       setEditingCommentId(null);
@@ -108,11 +105,12 @@ const MyCommentArea = ({ elementId }) => {
     }
   };
 
-  const handleEdit = (comment) => {
+  const handleEdit = (e, comment) => {
+    console.log(comment);
     setComment(comment.comment);
     setRating(comment.rate);
     setEditingCommentId(comment._id);
-    alert("Edited correctly");
+    // alert("Edited correctly");
     setError("");
   };
 
@@ -198,6 +196,7 @@ const MyCommentArea = ({ elementId }) => {
               setError("Please insert a number between 1 and 5");
             }
           }}
+          value={rating ? rating : ""}
         />
       </Form.Group>
       <Form.Group>

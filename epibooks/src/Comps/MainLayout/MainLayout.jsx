@@ -1,5 +1,5 @@
 import AllTheBooks from "../AllTheBooks/AllTheBooks";
-import MyAlert from "../MyAlert/MyAlert";
+import Welcome from "../Welcome/Welcome";
 import MyFooter from "../MyFooter/MyFooter";
 import MyNavbar from "../MyNav/MyNavbar";
 
@@ -7,7 +7,7 @@ export const MainLayout = () => {
   return (
     <>
       <MyNavbar />
-      <MyAlert />
+      <Welcome />
       <AllTheBooks />
       <MyFooter />
     </>

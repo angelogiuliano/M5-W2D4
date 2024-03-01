@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import Alert from "react-bootstrap/Alert";
-import "./MyAlert.css";
+import "./Welcome.css";
 
-function MyAlert({variant, message}) {
+function Welcome({variant, message}) {
   const [count, setCount] = useState(10);
   const [show, setShow] = useState(true);
 
@@ -42,4 +42,4 @@ function MyAlert({variant, message}) {
   );
 }
 
-export default MyAlert;
+export default Welcome;

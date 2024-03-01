@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Container from "react-bootstrap/Container";
 import MyCard from "../MyCard/MyCard";
 import Row from "react-bootstrap/Row";
-import MyAlert from "../MyAlert/MyAlert";
+import Welcome from "../Welcome/Welcome";
 import {
   allBooks,
   getBooks,
@@ -61,7 +61,7 @@ const AllTheBooks = () => {
         </div>
       )}
       {isError && (
-        <MyAlert
+        <Welcome
           message="Error, please try again later"
           show={false}
           variant="danger"
