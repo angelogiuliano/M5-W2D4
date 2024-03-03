@@ -47,7 +47,7 @@ const AllTheBooks = () => {
     ));
 
   return (
-    <>
+    <div>
       {isLoading && (
         <div className="d-flex justify-content-center my-5">
           <Circles
@@ -68,8 +68,12 @@ const AllTheBooks = () => {
         />
       )}
       {!isLoading && !isError && (
-        <div className="d-flex justify-content-center">
-          <Container data-testid="container-test" className="w-50 border-r">
+        <div
+          role="book-container"
+          data-testid="container-test"
+          className="d-flex justify-content-center"
+        >
+          <Container className="w-50 border-r">
             <Row>
               {books.length > 0 ? (
                 displayFilteredBooks(books)
@@ -83,7 +87,7 @@ const AllTheBooks = () => {
           </Container>
         </div>
       )}
-    </>
+    </div>
   );
 };
 
