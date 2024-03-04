@@ -20,6 +20,7 @@ function MyCard({ title, price, imgSrc, category, asin, onClick, isSelected }) {
     <Col sm={12} md={6} lg={3} className="mt-4">
       <Card className={"my-3"} onClick={handleClick}>
         <Card.Img
+          data-testid="my-card-id"
           className={isSelected ? "card-img cardSelected" : "card-img"}
           variant="top"
           src={imgSrc}
