@@ -18,9 +18,9 @@ function MyCard({ title, price, imgSrc, category, asin, onClick, isSelected }) {
 
   return (
     <Col sm={12} md={6} lg={3} className="mt-4">
-      <Card className={"my-3"} onClick={handleClick}>
+      <Card className={"my-3"} onClick={handleClick} data-testid="my-card-id">
         <Card.Img
-          data-testid="my-card-id"
+          data-testid="my-image-id"
           className={isSelected ? "card-img cardSelected" : "card-img"}
           variant="top"
           src={imgSrc}

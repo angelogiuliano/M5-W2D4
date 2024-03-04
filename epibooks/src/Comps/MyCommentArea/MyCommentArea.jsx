@@ -207,7 +207,7 @@ const MyCommentArea = ({ elementId }) => {
     </Form>
   ) : (
     <div className="mt-5 d-flex text-center">
-      <h3 className="w-100">Please select a card 😊</h3>
+      <h3 data-testid="h3-test-id" className="w-100">Please select a card 😊</h3>
     </div>
   );
 };

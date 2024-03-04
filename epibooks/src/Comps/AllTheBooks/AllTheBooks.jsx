@@ -69,7 +69,6 @@ const AllTheBooks = () => {
       )}
       {!isLoading && !isError && (
         <div
-          role="book-container"
           data-testid="container-test"
           className="d-flex justify-content-center"
         >
