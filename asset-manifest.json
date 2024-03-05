@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/reactepibook/static/css/main.cbd1a522.css",
-    "main.js": "/reactepibook/static/js/main.3bfaf957.js",
-    "index.html": "/reactepibook/index.html",
-    "main.cbd1a522.css.map": "/reactepibook/static/css/main.cbd1a522.css.map",
-    "main.3bfaf957.js.map": "/reactepibook/static/js/main.3bfaf957.js.map"
+    "main.css": "/M5-W2D4/static/css/main.cbd1a522.css",
+    "main.js": "/M5-W2D4/static/js/main.6a26187d.js",
+    "index.html": "/M5-W2D4/index.html",
+    "main.cbd1a522.css.map": "/M5-W2D4/static/css/main.cbd1a522.css.map",
+    "main.6a26187d.js.map": "/M5-W2D4/static/js/main.6a26187d.js.map"
   },
   "entrypoints": [
     "static/css/main.cbd1a522.css",
-    "static/js/main.3bfaf957.js"
+    "static/js/main.6a26187d.js"
   ]
 }
