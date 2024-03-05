@@ -1,8 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 const url = "https://striveschool-api.herokuapp.com/books";
-const key =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWNmNjA2NzA0NTcyZjAwMTk0OTM5NDIiLCJpYXQiOjE3MDgwODk0NDcsImV4cCI6MTcwOTI5OTA0N30.4kLfeBI7P4IfRFuz6GSWjcR0NNWLy3Z83VDASt-3j1k";
+
 
 const initialState = {
   books: [],
@@ -13,7 +12,7 @@ const initialState = {
 export const getBooks = createAsyncThunk("books/GETBooks", async () => {
   try {
     const response = await axios.get(url, {
-      headers: { Authorization: `Bearer ${key}` },
+      headers: { Authorization: `Bearer ${process.env.REACT_APP_API_KEY}` },
     });
     return await response.data;
   } catch (e) {

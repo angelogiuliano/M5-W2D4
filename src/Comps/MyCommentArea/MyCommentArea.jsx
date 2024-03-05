@@ -4,8 +4,6 @@ import { Circles } from "react-loader-spinner";
 import { Button, Form, ListGroup } from "react-bootstrap";
 
 const MyCommentArea = ({ elementId }) => {
-  const key =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWQwOWQ1MmE3NzE2ODAwMTk3NzViYTkiLCJpYXQiOjE3MDgxNzA1NzgsImV4cCI6MTcwOTM4MDE3OH0.K7DUpJkqtq3ER_Fw2xCPolSmOyybJ_2Je_DmJ6PnZCQ";
   const [comment, setComment] = useState("");
   const [rating, setRating] = useState(0);
   const [comments, setComments] = useState([]);
@@ -25,7 +23,7 @@ const MyCommentArea = ({ elementId }) => {
     const url = `https://striveschool-api.herokuapp.com/api/books/${elementId}/comments/`;
     try {
       const response = await axios.get(url, {
-        headers: { Authorization: `Bearer ${key}` },
+        headers: { Authorization: `Bearer ${process.env.REACT_APP_API_KEY}` },
       });
       const first2Comments = response.data.reverse().slice(0, 5);
       setComments(first2Comments);
@@ -49,7 +47,7 @@ const MyCommentArea = ({ elementId }) => {
         url += editingCommentId;
         await axios.put(url, givenComment, {
           headers: {
-            Authorization: `Bearer ${key}`,
+            Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
             "Content-Type": "application/json",
           },
         });
@@ -58,7 +56,7 @@ const MyCommentArea = ({ elementId }) => {
         givenComment.elementId = elementId;
         await axios.post(url, givenComment, {
           headers: {
-            Authorization: `Bearer ${key}`,
+            Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
             "Content-Type": "application/json",
           },
         });
@@ -88,7 +86,7 @@ const MyCommentArea = ({ elementId }) => {
     try {
       await axios.delete(deleteUrl, {
         headers: {
-          Authorization: `Bearer ${key}`,
+          Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
         },
       });
 
@@ -106,7 +104,6 @@ const MyCommentArea = ({ elementId }) => {
   };
 
   const handleEdit = (e, comment) => {
-    console.log(comment);
     setComment(comment.comment);
     setRating(comment.rate);
     setEditingCommentId(comment._id);
@@ -207,7 +204,9 @@ const MyCommentArea = ({ elementId }) => {
     </Form>
   ) : (
     <div className="mt-5 d-flex text-center">
-      <h3 data-testid="h3-test-id" className="w-100">Please select a card 😊</h3>
+      <h3 data-testid="h3-test-id" className="w-100">
+        Please select a card 😊
+      </h3>
     </div>
   );
 };
