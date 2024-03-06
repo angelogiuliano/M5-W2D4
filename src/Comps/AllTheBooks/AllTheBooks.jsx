@@ -24,15 +24,18 @@ const AllTheBooks = () => {
   const dispatch = useDispatch();
 
   const handleCardClick = (asin) => {
+    // logic needed to apply the cardSelected className in the MyCard component
     setSelectedAsin(asin);
     setSelected(asin);
   };
 
   useEffect(() => {
+    // books in their initial "state"
     dispatch(getBooks());
   }, [dispatch]);
 
   const displayFilteredBooks = (bookCards) =>
+  // function needed to map the books returning a MyCard component for each book in the returned data array
     bookCards.map((book) => (
       <MyCard
         key={book.asin}
@@ -48,6 +51,7 @@ const AllTheBooks = () => {
 
   return (
     <div>
+      {/* if books are loading, a loading Circle will appear */}
       {isLoading && (
         <div className="d-flex justify-content-center my-5">
           <Circles
@@ -60,6 +64,7 @@ const AllTheBooks = () => {
           />
         </div>
       )}
+      {/* in case of any error, this message will be displayed */}
       {isError && (
         <Welcome
           message="Error, please try again later"
@@ -67,6 +72,7 @@ const AllTheBooks = () => {
           variant="danger"
         />
       )}
+      {/* if there's no loading, and no errors, we can return the data inside of this Row using the displayFilteredBooks function */}
       {!isLoading && !isError && (
         <div
           data-testid="container-test"

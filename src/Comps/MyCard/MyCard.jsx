@@ -8,6 +8,7 @@ function MyCard({ title, price, imgSrc, category, asin, onClick, isSelected }) {
 
   const handleClick = () => {
     if (onClick) {
+      // if the card was already selected (logic is inside the AllTheBooks component) the card will be deselected
       if (isSelected) {
         onClick(null);
       } else {

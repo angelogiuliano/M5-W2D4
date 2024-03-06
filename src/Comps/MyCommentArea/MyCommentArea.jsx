@@ -10,6 +10,8 @@ const MyCommentArea = ({ elementId }) => {
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [placeHolder, setPlaceHolder] = useState("1 - 5");
   const [error, setError] = useState("");
+  const key =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWU3MmVlMDhlMWMzYTAwMTkyMjg3ODUiLCJpYXQiOjE3MDk2NTEzMjEsImV4cCI6MTcxMDg2MDkyMX0.HyjY9rpDQLj0Yxqk-BCXxbFiO2ouCcI6mJ7EOWqoW24";
 
   useEffect(() => {
     elementId && fetchComments();
@@ -23,10 +25,11 @@ const MyCommentArea = ({ elementId }) => {
     const url = `https://striveschool-api.herokuapp.com/api/books/${elementId}/comments/`;
     try {
       const response = await axios.get(url, {
-        headers: { Authorization: `Bearer ${process.env.REACT_APP_API_KEY}` },
+        // env key would be needed for this to work, but for the exercise purpose, i'm using the key variable
+        headers: { Authorization: `Bearer ${key}` },
       });
-      const first2Comments = response.data.reverse().slice(0, 5);
-      setComments(first2Comments);
+      const first5Comments = response.data.reverse().slice(0, 5);
+      setComments(first5Comments);
       setError("");
     } catch (err) {
       console.error("Error fetching comments:", err);
@@ -47,7 +50,7 @@ const MyCommentArea = ({ elementId }) => {
         url += editingCommentId;
         await axios.put(url, givenComment, {
           headers: {
-            Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
+            Authorization: `Bearer ${key}`,
             "Content-Type": "application/json",
           },
         });
@@ -56,7 +59,7 @@ const MyCommentArea = ({ elementId }) => {
         givenComment.elementId = elementId;
         await axios.post(url, givenComment, {
           headers: {
-            Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
+            Authorization: `Bearer ${key}`,
             "Content-Type": "application/json",
           },
         });
@@ -86,7 +89,7 @@ const MyCommentArea = ({ elementId }) => {
     try {
       await axios.delete(deleteUrl, {
         headers: {
-          Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
+          Authorization: `Bearer ${key}`,
         },
       });
 
@@ -103,11 +106,10 @@ const MyCommentArea = ({ elementId }) => {
     }
   };
 
-  const handleEdit = (e, comment) => {
+  const handleEdit = (comment) => {
     setComment(comment.comment);
     setRating(comment.rate);
     setEditingCommentId(comment._id);
-    // alert("Edited correctly");
     setError("");
   };
 
@@ -131,14 +133,14 @@ const MyCommentArea = ({ elementId }) => {
                 variant="primary"
                 className="my-2"
                 size="sm"
-                onClick={(e) => handleEdit(e, comment)}
+                onClick={(e) => handleEdit(comment)}
               >
                 Edit Rating
               </Button>
               <Button
                 variant="danger"
                 size="sm"
-                onClick={(e) => handleDelete(e, comment._id)}
+                onClick={(e) => handleDelete(comment._id)}
               >
                 Delete Rating
               </Button>
@@ -181,6 +183,7 @@ const MyCommentArea = ({ elementId }) => {
           rows={1}
           placeholder="1 - 5"
           onChange={(e) => {
+            // dinamically "watching" the user input, changing the placeholder text and alerting an error if the input is wrong
             if (
               (e.target.value > 0 && e.target.value < 6) ||
               e.target.value === ""
